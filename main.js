@@ -35,7 +35,6 @@ function who() {
     if (xs > os) {
         result = 2;
     }
-    updateInfo(result);
     return result;
 }
 
@@ -44,15 +43,10 @@ function step (r, c) {
     if (Field[r][c] == 0) {
         Field[r][c] = who();
         draw();
-        if (winner()) {
-            alert(winner());
-        }
+        winner();
         return true;
     } else {
         draw();
-        if (winner()) {
-            alert(winner());
-        }
         return false;
     }
 }
@@ -63,13 +57,13 @@ function winner() {
     let mainDiag = checkDiagonal('main');
     let sideDiag = checkDiagonal('side');
     if (vertical) {
-        announceWinner(vertical);
+        setTimeout(() => {announceWinner(vertical)}, 0);
     } else if (horisontal) {
-        announceWinner(horisontal);
+        setTimeout(() => {announceWinner(horisontal)}, 0);
     } else if (mainDiag) {
-        announceWinner(mainDiag);
+        setTimeout(() => {announceWinner(mainDiag)}, 0);
     } else if (sideDiag) {
-        announceWinner(sideDiag);
+        setTimeout(() => {announceWinner(sideDiag)}, 0);
     }
 }
 
@@ -159,8 +153,20 @@ function restart() {
 
 function initialize() {
     draw();
+    initSettings();
     let info = document.getElementById("info");
+    let resetBtn = document.getElementById("reset");
+    resetBtn.onclick = restart;
     info.style.width = document.getElementById("field").offsetWidth + "px";   
+}
+
+function initSettings() {
+    let settings = document.getElementById("settings");
+    settings.innerHTML = `
+        <div><b>${N}х${N}</b></div>
+        <br><br>
+        <div>Собрать: <b>${M}</b></div>
+    `;
 }
 
 function announceWinner(num) {
@@ -178,7 +184,6 @@ function announceWinner(num) {
 function draw() {
     let fieldObj = document.getElementById("field");
     fieldObj.innerHTML = "";
-
     for (let rowN = 0; rowN < Field.length; rowN++) {
         let rowObj = document.createElement("div");
 
@@ -193,6 +198,7 @@ function draw() {
         }
         fieldObj.append(rowObj);
     }
+    updateInfo(who());
 }
 
 function setCeilStyle(ceilObj, row, ceil) {
@@ -237,9 +243,9 @@ function ceilMousedownHandler(event) {
 function updateInfo(who) {
     let info = document.getElementById("info");
     if (who == 1) {
-        info.innerHTML = "ХОДИТ КРАСНЫЙ"
-    } else {
         info.innerHTML = "ХОДИТ СИНИЙ"
+    } else {
+        info.innerHTML = "ХОДИТ КРАСНЫЙ"
     }
     return who;
 }
@@ -252,3 +258,4 @@ console.log(Field);
 console.log(Field, step(1, 0));
 console.log(Field, step(2, 2));
 */
+
